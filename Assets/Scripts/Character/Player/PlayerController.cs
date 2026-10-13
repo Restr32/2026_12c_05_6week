@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [Tooltip("Extra frames after leaving ground where jump still works.")]
     [SerializeField] float coyoteTime = 0.1f;
+    bool DoubleJumpAvailable;
 
     Rigidbody2D rb;
     Collider2D col;
@@ -53,8 +54,10 @@ public class PlayerController : MonoBehaviour
 
         isGrounded = Physics2D.OverlapBox(checkPos, groundCheckSize, 0f, groundLayer);
 
-        if (isGrounded)
+        if (isGrounded){
             coyoteTimer = coyoteTime;
+            DoubleJumpAvailable = true;
+        }
         else
             coyoteTimer -= Time.deltaTime;
     }
@@ -94,12 +97,15 @@ public class PlayerController : MonoBehaviour
         if (!jumpQueued) return;
         jumpQueued = false;
 
-        if (coyoteTimer > 0f)
+        if (coyoteTimer > 0f || DoubleJumpAvailable)
         {
             Vector2 velocity = rb.linearVelocity;
             velocity.y = jumpForce;
             rb.linearVelocity = velocity;
-            coyoteTimer = 0f;
+            if (coyoteTimer > 0f)
+                coyoteTimer = 0f;
+            else
+                DoubleJumpAvailable = false;
         }
     }
 
