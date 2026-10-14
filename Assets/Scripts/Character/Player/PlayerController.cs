@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [Tooltip("Extra frames after leaving ground where jump still works.")]
     [SerializeField] float coyoteTime = 0.1f;
+    // this variable is to check if you can do double jump
     bool DoubleJumpAvailable;
 
     Rigidbody2D rb;
